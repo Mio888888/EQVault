@@ -1,0 +1,22 @@
+[
+  { "id": "sennheiser-hd-600", "name": "Sennheiser HD 600", "source": "oratory1990", "form": "over-ear", "rig": "GRAS 43AG-7", "recommended": true },
+  { "id": "sennheiser-hd-650", "name": "Sennheiser HD 650", "source": "oratory1990", "form": "over-ear", "rig": "GRAS 43AG-7", "recommended": true },
+  { "id": "sennheiser-hd-800s", "name": "Sennheiser HD 800S", "source": "oratory1990", "form": "over-ear", "rig": "GRAS 43AG-7", "recommended": true },
+  { "id": "beyerdynamic-dt-880-250-ohm", "name": "Beyerdynamic DT 880 (250 Ohm)", "source": "oratory1990", "form": "over-ear", "rig": "GRAS 43AG-7", "recommended": true },
+  { "id": "beyerdynamic-dt-990-250-ohm", "name": "Beyerdynamic DT 990 (250 Ohm)", "source": "oratory1990", "form": "over-ear", "rig": "GRAS 43AG-7", "recommended": true },
+  { "id": "hifiman-sundara", "name": "HiFiMan Sundara", "source": "oratory1990", "form": "over-ear", "rig": "GRAS 43AG-7", "recommended": true },
+  { "id": "hifiman-he400i", "name": "HiFiMan HE400i", "source": "oratory1990", "form": "over-ear", "rig": "GRAS 43AG-7", "recommended": true },
+  { "id": "audeze-lcd-2", "name": "Audeze LCD-2", "source": "crinacle", "form": "over-ear", "rig": "Bruel & Kjaer 5128", "recommended": true },
+  { "id": "audeze-lcd-x", "name": "Audeze LCD-X", "source": "crinacle", "form": "over-ear", "rig": "Bruel & Kjaer 5128", "recommended": true },
+  { "id": "fender-thd-9", "name": "Fender THD 9", "source": "crinacle", "form": "in-ear", "rig": "IEC 60318-4", "recommended": true },
+  { "id": "moondrop-aria", "name": "Moondrop Aria", "source": "crinacle", "form": "in-ear", "rig": "IEC 60318-4", "recommended": true },
+  { "id": "shure-se846", "name": "Shure SE846", "source": "crinacle", "form": "in-ear", "rig": "IEC 60318-4", "recommended": true },
+  { "id": "apple-airpods-max", "name": "Apple AirPods Max", "source": "oratory1990", "form": "over-ear", "rig": "GRAS 43AG-7", "recommended": false },
+  { "id": "sony-wh-1000xm5", "name": "Sony WH-1000XM5", "source": "oratory1990", "form": "over-ear", "rig": "GRAS 43AG-7", "recommended": false },
+  { "id": "bose-qc45", "name": "Bose QuietComfort 45", "source": "oratory1990", "form": "over-ear", "rig": "GRAS 43AG-7", "recommended": false },
+  { "id": " grado-sr325x", "name": "Grado SR325x", "source": "crinacle", "form": "over-ear", "rig": "Bruel & Kjaer 5128", "recommended": false },
+  { "id": "etymotic-er4sr", "name": "Etymotic ER4SR", "source": "crinacle", "form": "in-ear", "rig": "IEC 60318-4", "recommended": false },
+  { "id": "fiio-fh5s", "name": "FiiO FH5s", "source": "crinacle", "form": "in-ear", "rig": "IEC 60318-4", "recommended": false },
+  { "id": "moondrop-starfield", "name": "Moondrop Starfield", "source": "crinacle", "form": "in-ear", "rig": "IEC 60318-4", "recommended": false },
+  { "id": "koss-kph30i", "name": "Koss KPH30i", "source": "oratory1990", "form": "over-ear", "rig": "GRAS 43AG-7", "recommended": false }
+]

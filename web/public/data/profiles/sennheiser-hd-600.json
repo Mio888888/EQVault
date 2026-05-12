@@ -1,0 +1,41 @@
+{
+  "id": "sennheiser-hd-600",
+  "name": "Sennheiser HD 600",
+  "source": "oratory1990",
+  "form": "over-ear",
+  "rig": "GRAS 43AG-7",
+  "recommended": true,
+  "files": {
+    "parametric_eq": "data/raw/sennheiser-hd-600/ParametricEQ.txt",
+    "fixed_band_eq": "data/raw/sennheiser-hd-600/FixedBandEQ.txt",
+    "graphic_eq": "data/raw/sennheiser-hd-600/GraphicEQ.txt",
+    "csv": "data/raw/sennheiser-hd-600/result.csv"
+  },
+  "parametric_eq": {
+    "preamp": -4.5,
+    "filters": [
+      { "type": "LowShelf", "fc": 105, "gain": 3.5, "q": 0.71 },
+      { "type": "Peaking", "fc": 200, "gain": -1.2, "q": 1.5 },
+      { "type": "Peaking", "fc": 2200, "gain": -2.1, "q": 2.0 },
+      { "type": "Peaking", "fc": 3500, "gain": 1.5, "q": 2.5 },
+      { "type": "Peaking", "fc": 5800, "gain": -1.8, "q": 3.0 },
+      { "type": "HighShelf", "fc": 10000, "gain": -2.0, "q": 0.71 }
+    ]
+  },
+  "fixed_band_eq": {
+    "preamp": -3.8,
+    "filters": [
+      { "type": "Peaking", "fc": 31, "gain": 3.0, "q": 1.41 },
+      { "type": "Peaking", "fc": 62, "gain": 2.5, "q": 1.41 },
+      { "type": "Peaking", "fc": 125, "gain": 1.5, "q": 1.41 },
+      { "type": "Peaking", "fc": 250, "gain": -0.8, "q": 1.41 },
+      { "type": "Peaking", "fc": 500, "gain": 0.2, "q": 1.41 },
+      { "type": "Peaking", "fc": 1000, "gain": -0.3, "q": 1.41 },
+      { "type": "Peaking", "fc": 2000, "gain": -1.5, "q": 1.41 },
+      { "type": "Peaking", "fc": 4000, "gain": 1.2, "q": 1.41 },
+      { "type": "Peaking", "fc": 8000, "gain": -1.0, "q": 1.41 },
+      { "type": "Peaking", "fc": 16000, "gain": -2.0, "q": 1.41 }
+    ]
+  },
+  "graphic_eq": "25 0.5; 40 1.2; 63 2.0; 100 2.5; 160 1.8; 250 0.5; 400 0.2; 630 -0.1; 1000 -0.5; 1600 -1.0; 2500 -1.2; 4000 1.0; 6300 -0.8; 10000 -1.5; 16000 -2.0"
+}

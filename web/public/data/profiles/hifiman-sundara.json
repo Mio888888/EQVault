@@ -1,0 +1,40 @@
+{
+  "id": "hifiman-sundara",
+  "name": "HiFiMan Sundara",
+  "source": "oratory1990",
+  "form": "over-ear",
+  "rig": "GRAS 43AG-7",
+  "recommended": true,
+  "files": {
+    "parametric_eq": "data/raw/hifiman-sundara/ParametricEQ.txt",
+    "fixed_band_eq": "data/raw/hifiman-sundara/FixedBandEQ.txt",
+    "graphic_eq": "data/raw/hifiman-sundara/GraphicEQ.txt",
+    "csv": "data/raw/hifiman-sundara/result.csv"
+  },
+  "parametric_eq": {
+    "preamp": -3.2,
+    "filters": [
+      { "type": "LowShelf", "fc": 80, "gain": 4.0, "q": 0.71 },
+      { "type": "Peaking", "fc": 500, "gain": -1.5, "q": 1.5 },
+      { "type": "Peaking", "fc": 1800, "gain": -0.8, "q": 2.0 },
+      { "type": "Peaking", "fc": 4500, "gain": 2.5, "q": 2.5 },
+      { "type": "HighShelf", "fc": 9500, "gain": -1.5, "q": 0.71 }
+    ]
+  },
+  "fixed_band_eq": {
+    "preamp": -2.8,
+    "filters": [
+      { "type": "Peaking", "fc": 31, "gain": 3.5, "q": 1.41 },
+      { "type": "Peaking", "fc": 62, "gain": 3.0, "q": 1.41 },
+      { "type": "Peaking", "fc": 125, "gain": 2.0, "q": 1.41 },
+      { "type": "Peaking", "fc": 250, "gain": 0.8, "q": 1.41 },
+      { "type": "Peaking", "fc": 500, "gain": -1.0, "q": 1.41 },
+      { "type": "Peaking", "fc": 1000, "gain": -0.3, "q": 1.41 },
+      { "type": "Peaking", "fc": 2000, "gain": 0.5, "q": 1.41 },
+      { "type": "Peaking", "fc": 4000, "gain": 2.0, "q": 1.41 },
+      { "type": "Peaking", "fc": 8000, "gain": -0.5, "q": 1.41 },
+      { "type": "Peaking", "fc": 16000, "gain": -1.2, "q": 1.41 }
+    ]
+  },
+  "graphic_eq": "25 2.5; 40 3.0; 63 3.5; 100 3.0; 160 1.5; 250 0.5; 400 -0.5; 630 -0.8; 1000 -0.2; 1600 0.3; 2500 1.0; 4000 2.0; 6300 0.5; 10000 -0.8; 16000 -1.0"
+}

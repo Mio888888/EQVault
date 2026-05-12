@@ -1,0 +1,40 @@
+{
+  "id": "moondrop-aria",
+  "name": "Moondrop Aria",
+  "source": "crinacle",
+  "form": "in-ear",
+  "rig": "IEC 60318-4",
+  "recommended": true,
+  "files": {
+    "parametric_eq": "data/raw/moondrop-aria/ParametricEQ.txt",
+    "fixed_band_eq": "data/raw/moondrop-aria/FixedBandEQ.txt",
+    "graphic_eq": "data/raw/moondrop-aria/GraphicEQ.txt",
+    "csv": "data/raw/moondrop-aria/result.csv"
+  },
+  "parametric_eq": {
+    "preamp": -2.8,
+    "filters": [
+      { "type": "LowShelf", "fc": 120, "gain": 2.0, "q": 0.71 },
+      { "type": "Peaking", "fc": 800, "gain": -1.0, "q": 1.2 },
+      { "type": "Peaking", "fc": 3000, "gain": 1.8, "q": 2.0 },
+      { "type": "Peaking", "fc": 6000, "gain": -2.5, "q": 3.0 },
+      { "type": "HighShelf", "fc": 10000, "gain": -1.5, "q": 0.71 }
+    ]
+  },
+  "fixed_band_eq": {
+    "preamp": -2.5,
+    "filters": [
+      { "type": "Peaking", "fc": 31, "gain": 2.0, "q": 1.41 },
+      { "type": "Peaking", "fc": 62, "gain": 1.5, "q": 1.41 },
+      { "type": "Peaking", "fc": 125, "gain": 1.0, "q": 1.41 },
+      { "type": "Peaking", "fc": 250, "gain": 0.5, "q": 1.41 },
+      { "type": "Peaking", "fc": 500, "gain": -0.3, "q": 1.41 },
+      { "type": "Peaking", "fc": 1000, "gain": -0.5, "q": 1.41 },
+      { "type": "Peaking", "fc": 2000, "gain": 0.8, "q": 1.41 },
+      { "type": "Peaking", "fc": 4000, "gain": 1.5, "q": 1.41 },
+      { "type": "Peaking", "fc": 8000, "gain": -1.5, "q": 1.41 },
+      { "type": "Peaking", "fc": 16000, "gain": -1.0, "q": 1.41 }
+    ]
+  },
+  "graphic_eq": "25 1.5; 40 1.8; 63 1.5; 100 1.0; 160 0.5; 250 0.3; 400 -0.2; 630 -0.5; 1000 -0.3; 1600 0.3; 2500 1.0; 4000 1.5; 6300 -1.0; 10000 -1.2; 16000 -0.8"
+}
