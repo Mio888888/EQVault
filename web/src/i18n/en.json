@@ -1,0 +1,109 @@
+{
+  "app": {
+    "title": "EQVault",
+    "profiles": "profiles",
+    "recommended": "recommended",
+    "lastSync": "Last sync:",
+    "recommendedToggle": "Recommended",
+    "allProfiles": "All Profiles",
+    "results_one": "{{count}} result",
+    "results_other": "{{count}} results",
+    "loading": "Loading...",
+    "loadError": "Failed to load data: {{error}}"
+  },
+  "search": {
+    "placeholder": "Search headphones...",
+    "clear": "Clear search"
+  },
+  "filter": {
+    "allSources": "All Sources",
+    "allForms": "All Forms",
+    "allRigs": "All Rigs",
+    "bySource": "Filter by source",
+    "byForm": "Filter by form",
+    "byRig": "Filter by rig"
+  },
+  "list": {
+    "empty": "No profiles found"
+  },
+  "item": {
+    "recommended": "Recommended",
+    "formOverEar": "Over-ear",
+    "formInEar": "In-ear",
+    "formEarbud": "Earbud"
+  },
+  "detail": {
+    "back": "Back",
+    "backToList": "Back to list",
+    "loading": "Loading profile...",
+    "loadError": "Failed to load profile: {{error}}",
+    "unknownError": "Unknown error",
+    "tabOverview": "Overview",
+    "tabEq": "EQ Settings",
+    "tabDownload": "Download"
+  },
+  "overview": {
+    "freqResponse": "Frequency Response",
+    "chartLoading": "Loading chart data...",
+    "noData": "No frequency response data available",
+    "eqSummary": "EQ Summary",
+    "parametricPreamp": "Parametric Preamp:",
+    "filters": "Filters:",
+    "fixedBandPreamp": "Fixed Band Preamp:",
+    "bands": "Bands:"
+  },
+  "download": {
+    "title": "Download EQ Presets",
+    "apoFormat": "EqualizerAPO format",
+    "freqData": "Frequency response data",
+    "sourceFiles": "Source Files",
+    "parametric": "Parametric:",
+    "fixedBand": "Fixed Band:",
+    "graphic": "Graphic:",
+    "csv": "CSV:"
+  },
+  "eq": {
+    "preamp": "Preamp:",
+    "colIndex": "#",
+    "colType": "Type",
+    "colFreq": "Freq (Hz)",
+    "colGain": "Gain (dB)",
+    "colQ": "Q",
+    "reset": "Reset",
+    "exportModified": "Export Modified",
+    "copyModified": "Copy Modified",
+    "copied": "Copied!",
+    "modified": "Modified",
+    "parametric": "Parametric EQ",
+    "fixedBand": "Fixed Band EQ",
+    "graphic": "Graphic EQ",
+    "view": "View",
+    "edit": "Edit",
+    "copy": "Copy"
+  },
+  "audio": {
+    "listen": "Listen",
+    "pinkNoise": "Pink Noise",
+    "whiteNoise": "White Noise",
+    "freqSweep": "Freq Sweep",
+    "tone": "Tone",
+    "play": "Play",
+    "pause": "Pause",
+    "eqOn": "EQ ON",
+    "eqOff": "EQ OFF",
+    "playing": "Playing {{tone}} with EQ {{state}}",
+    "idle": "Select a test tone and press play to listen",
+    "playError": "Failed to play audio"
+  },
+  "chart": {
+    "raw": "Raw",
+    "target": "Target",
+    "equalization": "Equalization",
+    "equalized": "Equalized",
+    "freqAxis": "Frequency (Hz)",
+    "dbAxis": "dBr"
+  },
+  "lang": {
+    "toggle": "EN"
+  }
+}

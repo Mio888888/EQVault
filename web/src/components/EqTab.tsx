@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { ProfileDetail as ProfileDetailType, EqPreset } from '../data/types';
 import EqTable from './EqTable';
 import AudioPlayer from './AudioPlayer';
@@ -29,15 +30,14 @@ function formatEqText(preamp: number, filters: { type: string; fc: number; gain:
 }
 
 export default function EqTab({ profile, onCopy, copiedKey }: EqTabProps) {
+  const { t } = useTranslation();
   const [editingParametric, setEditingParametric] = useState(false);
   const [workingParametric, setWorkingParametric] = useState<EqPreset>(profile.eq.parametric);
 
-  // The preset used for audio playback: working copy if editing, original otherwise
   const audioPreset = editingParametric ? workingParametric : profile.eq.parametric;
 
   const handleToggleEdit = useCallback(() => {
     setEditingParametric((prev) => !prev);
-    // When entering edit mode, reset working preset to current original
     setWorkingParametric(profile.eq.parametric);
   }, [profile.eq.parametric]);
 
@@ -47,15 +47,13 @@ export default function EqTab({ profile, onCopy, copiedKey }: EqTabProps) {
 
   return (
     <div className="space-y-4">
-      {/* Audio Player at top of EQ tab when editing */}
       {editingParametric && (
         <AudioPlayer preset={audioPreset} />
       )}
 
-      {/* Parametric EQ section with edit toggle */}
       <div className="bg-white rounded-lg border border-gray-200 p-4">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-gray-700">Parametric EQ</h2>
+          <h2 className="text-sm font-semibold text-gray-700">{t('eq.parametric')}</h2>
           <div className="flex items-center gap-2">
             <button
               onClick={handleToggleEdit}
@@ -65,14 +63,14 @@ export default function EqTab({ profile, onCopy, copiedKey }: EqTabProps) {
                   : 'border-gray-300 text-gray-600 hover:bg-gray-50'
               }`}
             >
-              {editingParametric ? 'View' : 'Edit'}
+              {editingParametric ? t('eq.view') : t('eq.edit')}
             </button>
             {!editingParametric && (
               <button
                 onClick={() => onCopy('parametric', formatEqText(profile.eq.parametric.preamp, profile.eq.parametric.filters))}
                 className="text-xs px-2.5 py-1 rounded border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors"
               >
-                {copiedKey === 'parametric' ? 'Copied!' : 'Copy'}
+                {copiedKey === 'parametric' ? t('eq.copied') : t('eq.copy')}
               </button>
             )}
           </div>
@@ -92,32 +90,30 @@ export default function EqTab({ profile, onCopy, copiedKey }: EqTabProps) {
         )}
       </div>
 
-      {/* Fixed Band EQ */}
       {!editingParametric && (
         <div className="bg-white rounded-lg border border-gray-200 p-4">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-semibold text-gray-700">Fixed Band EQ</h2>
+            <h2 className="text-sm font-semibold text-gray-700">{t('eq.fixedBand')}</h2>
             <button
               onClick={() => onCopy('fixed_band', formatEqText(profile.eq.fixed_band.preamp, profile.eq.fixed_band.filters))}
               className="text-xs px-2.5 py-1 rounded border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors"
             >
-              {copiedKey === 'fixed_band' ? 'Copied!' : 'Copy'}
+              {copiedKey === 'fixed_band' ? t('eq.copied') : t('eq.copy')}
             </button>
           </div>
           <EqTable preamp={profile.eq.fixed_band.preamp} filters={profile.eq.fixed_band.filters} />
         </div>
       )}
 
-      {/* Graphic EQ */}
       {!editingParametric && (
         <div className="bg-white rounded-lg border border-gray-200 p-4">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-semibold text-gray-700">Graphic EQ</h2>
+            <h2 className="text-sm font-semibold text-gray-700">{t('eq.graphic')}</h2>
             <button
               onClick={() => onCopy('graphic', `GraphicEQ: ${profile.eq.graphic}`)}
               className="text-xs px-2.5 py-1 rounded border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors"
             >
-              {copiedKey === 'graphic' ? 'Copied!' : 'Copy'}
+              {copiedKey === 'graphic' ? t('eq.copied') : t('eq.copy')}
             </button>
           </div>
           <pre className="text-xs font-mono text-gray-700 bg-gray-50 rounded p-3 overflow-x-auto whitespace-pre-wrap break-all">

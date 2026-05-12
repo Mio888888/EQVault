@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useMeta, useIndex } from './hooks/useData';
 import { filterProfiles } from './lib/search';
 import type { FilterState } from './data/types';
@@ -6,6 +7,8 @@ import SearchBar from './components/SearchBar';
 import FilterDropdowns from './components/FilterDropdowns';
 import ProfileList from './components/ProfileList';
 import ProfileDetail from './components/ProfileDetail';
+import LanguageToggle from './components/LanguageToggle';
+import SkeletonList from './components/SkeletonList';
 
 interface ViewState {
   view: 'list' | 'detail';
@@ -13,6 +16,7 @@ interface ViewState {
 }
 
 export default function App() {
+  const { t } = useTranslation();
   const [showAll, setShowAll] = useState(false);
   const [query, setQuery] = useState('');
   const [filters, setFilters] = useState<FilterState>({ source: '', form: '', rig: '' });
@@ -36,7 +40,6 @@ export default function App() {
 
   const handleToggle = useCallback(() => {
     setShowAll((prev) => !prev);
-    // Reset filters when toggling
     setFilters({ source: '', form: '', rig: '' });
   }, []);
 
@@ -52,16 +55,19 @@ export default function App() {
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-3">
-            <h1 className="text-xl font-bold text-gray-900">EQVault</h1>
-            {!metaLoading && meta && (
-              <div className="text-xs text-gray-500 text-right">
-                <span>{meta.total_profiles} profiles</span>
-                <span className="mx-1.5">|</span>
-                <span>{meta.recommended_count} recommended</span>
-                <br />
-                <span>Last sync: {new Date(meta.sync_time).toLocaleDateString()}</span>
-              </div>
-            )}
+            <h1 className="text-xl font-bold text-gray-900">{t('app.title')}</h1>
+            <div className="flex items-center gap-2">
+              <LanguageToggle />
+              {!metaLoading && meta && (
+                <div className="text-xs text-gray-500 text-right">
+                  <span>{meta.total_profiles} {t('app.profiles')}</span>
+                  <span className="mx-1.5">|</span>
+                  <span>{meta.recommended_count} {t('app.recommended')}</span>
+                  <br />
+                  <span>{t('app.lastSync')} {new Date(meta.sync_time).toLocaleDateString()}</span>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Toggle */}
@@ -75,7 +81,7 @@ export default function App() {
                     : 'text-gray-500 hover:text-gray-700'
                 }`}
               >
-                Recommended
+                {t('app.recommendedToggle')}
               </button>
               <button
                 onClick={showAll ? undefined : handleToggle}
@@ -85,11 +91,11 @@ export default function App() {
                     : 'text-gray-500 hover:text-gray-700'
                 }`}
               >
-                All Profiles
+                {t('app.allProfiles')}
               </button>
             </div>
             <span className="text-sm text-gray-500">
-              {filtered.length} result{filtered.length !== 1 ? 's' : ''}
+              {t('app.results', { count: filtered.length })}
             </span>
           </div>
 
@@ -104,14 +110,12 @@ export default function App() {
       {/* Main content */}
       <main className="max-w-4xl mx-auto px-4 py-4">
         {indexLoading && (
-          <div className="flex items-center justify-center py-12 text-gray-400 text-sm">
-            Loading...
-          </div>
+          <SkeletonList />
         )}
 
         {indexError && (
           <div className="bg-red-50 text-red-700 text-sm rounded-lg p-4">
-            Failed to load data: {indexError}
+            {t('app.loadError', { error: indexError })}
           </div>
         )}
 

@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   LineChart,
   Line,
@@ -23,7 +24,6 @@ const FREQ_TICKS = [
   10000, 20000,
 ];
 
-/** Format frequency for log axis tick labels */
 function formatFreqTick(x: number): string {
   const log = Math.floor(Math.log10(x));
   const mantissa = x / 10 ** log;
@@ -35,19 +35,20 @@ function formatFreqTick(x: number): string {
 
 interface CurveConfig {
   key: string;
-  name: string;
+  nameKey: string;
   color: string;
   dashArray?: string;
 }
 
 const CURVES: CurveConfig[] = [
-  { key: 'raw', name: 'Raw', color: '#3b82f6' },
-  { key: 'target', name: 'Target', color: '#22c55e', dashArray: '5 3' },
-  { key: 'equalization', name: 'Equalization', color: '#f97316' },
-  { key: 'equalized_raw', name: 'Equalized', color: '#ef4444' },
+  { key: 'raw', nameKey: 'chart.raw', color: '#3b82f6' },
+  { key: 'target', nameKey: 'chart.target', color: '#22c55e', dashArray: '5 3' },
+  { key: 'equalization', nameKey: 'chart.equalization', color: '#f97316' },
+  { key: 'equalized_raw', nameKey: 'chart.equalized', color: '#ef4444' },
 ];
 
 export default function FrequencyResponseChart({ data }: FrequencyResponseChartProps) {
+  const { t } = useTranslation();
   const [visible, setVisible] = useState<Record<string, boolean>>({
     raw: true,
     target: true,
@@ -80,7 +81,7 @@ export default function FrequencyResponseChart({ data }: FrequencyResponseChartP
               interval={0}
               tick={{ fontSize: 11, fill: '#6b7280' }}
               label={{
-                value: 'Frequency (Hz)',
+                value: t('chart.freqAxis'),
                 position: 'insideBottom' as const,
                 dy: 18,
                 fontSize: 12,
@@ -92,7 +93,7 @@ export default function FrequencyResponseChart({ data }: FrequencyResponseChartP
               type="number"
               tick={{ fontSize: 11, fill: '#6b7280' }}
               label={{
-                value: 'dBr',
+                value: t('chart.dbAxis'),
                 angle: -90,
                 dx: -5,
                 position: 'insideBottomLeft' as const,
@@ -116,7 +117,7 @@ export default function FrequencyResponseChart({ data }: FrequencyResponseChartP
               <Line
                 key={curve.key}
                 dataKey={visible[curve.key] ? curve.key : ''}
-                name={curve.name}
+                name={t(curve.nameKey)}
                 type="linear"
                 dot={false}
                 stroke={curve.color}
@@ -130,7 +131,6 @@ export default function FrequencyResponseChart({ data }: FrequencyResponseChartP
         </ResponsiveContainer>
       </div>
 
-      {/* Curve toggles */}
       <div className="flex flex-wrap gap-3 mt-2 justify-center">
         {CURVES.map((curve) => (
           <button
@@ -148,7 +148,7 @@ export default function FrequencyResponseChart({ data }: FrequencyResponseChartP
             <span
               className={visible[curve.key] ? 'text-gray-700' : 'text-gray-400 line-through'}
             >
-              {curve.name}
+              {t(curve.nameKey)}
             </span>
           </button>
         ))}

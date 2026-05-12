@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { ProfileDetail as ProfileDetailType } from '../data/types';
 import { useProfile } from '../hooks/useData';
 import { parseAutoEqCsv, type CsvData } from '../lib/csv';
@@ -14,13 +15,8 @@ interface ProfileDetailProps {
 
 type TabId = 'overview' | 'eq' | 'download';
 
-const TABS: { id: TabId; label: string }[] = [
-  { id: 'overview', label: 'Overview' },
-  { id: 'eq', label: 'EQ Settings' },
-  { id: 'download', label: 'Download' },
-];
-
 export default function ProfileDetail({ profileId, onBack }: ProfileDetailProps) {
+  const { t } = useTranslation();
   const { data: profile, loading, error } = useProfile(profileId);
   const [activeTab, setActiveTab] = useState<TabId>('overview');
   const [csvData, setCsvData] = useState<CsvData | null>(null);
@@ -28,7 +24,12 @@ export default function ProfileDetail({ profileId, onBack }: ProfileDetailProps)
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const csvLoading = csvData === null && !csvError && !!profile?.files?.csv;
 
-  // Fetch CSV data when profile loads
+  const TABS: { id: TabId; label: string }[] = [
+    { id: 'overview', label: t('detail.tabOverview') },
+    { id: 'eq', label: t('detail.tabEq') },
+    { id: 'download', label: t('detail.tabDownload') },
+  ];
+
   useEffect(() => {
     if (!profile?.files?.csv) return;
 
@@ -69,7 +70,7 @@ export default function ProfileDetail({ profileId, onBack }: ProfileDetailProps)
   if (loading) {
     return (
       <div className="flex items-center justify-center py-16 text-gray-400 text-sm">
-        Loading profile...
+        {t('detail.loading')}
       </div>
     );
   }
@@ -81,10 +82,10 @@ export default function ProfileDetail({ profileId, onBack }: ProfileDetailProps)
           onClick={onBack}
           className="text-blue-600 hover:text-blue-800 text-sm mb-4 inline-flex items-center gap-1"
         >
-          &larr; Back
+          &larr; {t('detail.back')}
         </button>
         <div className="bg-red-50 text-red-700 text-sm rounded-lg p-4">
-          Failed to load profile: {error ?? 'Unknown error'}
+          {t('detail.loadError', { error: error ?? t('detail.unknownError') })}
         </div>
       </div>
     );
@@ -99,7 +100,7 @@ export default function ProfileDetail({ profileId, onBack }: ProfileDetailProps)
             onClick={onBack}
             className="text-blue-600 hover:text-blue-800 text-sm mb-2 inline-flex items-center gap-1"
           >
-            &larr; Back to list
+            &larr; {t('detail.backToList')}
           </button>
           <div className="flex items-start gap-3">
             <div className="flex-1 min-w-0">
@@ -114,7 +115,7 @@ export default function ProfileDetail({ profileId, onBack }: ProfileDetailProps)
                 <span className="text-xs text-gray-500">{profile.rig}</span>
                 {profile.recommended && (
                   <span className="text-xs px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-medium">
-                    &#9733; Recommended
+                    &#9733; {t('item.recommended')}
                   </span>
                 )}
               </div>
@@ -172,13 +173,14 @@ function OverviewTab({
   csvData: CsvData | null;
   csvLoading: boolean;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="space-y-4">
       <div className="bg-white rounded-lg border border-gray-200 p-4">
-        <h2 className="text-sm font-semibold text-gray-700 mb-3">Frequency Response</h2>
+        <h2 className="text-sm font-semibold text-gray-700 mb-3">{t('overview.freqResponse')}</h2>
         {csvLoading && (
           <div className="flex items-center justify-center py-12 text-gray-400 text-sm">
-            Loading chart data...
+            {t('overview.chartLoading')}
           </div>
         )}
         {!csvLoading && csvData && (
@@ -186,38 +188,36 @@ function OverviewTab({
         )}
         {!csvLoading && !csvData && (
           <div className="flex items-center justify-center py-12 text-gray-400 text-sm">
-            No frequency response data available
+            {t('overview.noData')}
           </div>
         )}
       </div>
 
-      {/* Audio Player */}
       <AudioPlayer preset={profile.eq.parametric} />
 
-      {/* Quick EQ summary */}
       <div className="bg-white rounded-lg border border-gray-200 p-4">
-        <h2 className="text-sm font-semibold text-gray-700 mb-2">EQ Summary</h2>
+        <h2 className="text-sm font-semibold text-gray-700 mb-2">{t('overview.eqSummary')}</h2>
         <div className="grid grid-cols-2 gap-3 text-sm">
           <div>
-            <span className="text-gray-500">Parametric Preamp:</span>{' '}
+            <span className="text-gray-500">{t('overview.parametricPreamp')}</span>{' '}
             <span className="font-mono text-gray-900">
               {profile.eq.parametric.preamp > 0 ? '+' : ''}
               {profile.eq.parametric.preamp.toFixed(1)} dB
             </span>
           </div>
           <div>
-            <span className="text-gray-500">Filters:</span>{' '}
+            <span className="text-gray-500">{t('overview.filters')}</span>{' '}
             <span className="font-mono text-gray-900">{profile.eq.parametric.filters.length}</span>
           </div>
           <div>
-            <span className="text-gray-500">Fixed Band Preamp:</span>{' '}
+            <span className="text-gray-500">{t('overview.fixedBandPreamp')}</span>{' '}
             <span className="font-mono text-gray-900">
               {profile.eq.fixed_band.preamp > 0 ? '+' : ''}
               {profile.eq.fixed_band.preamp.toFixed(1)} dB
             </span>
           </div>
           <div>
-            <span className="text-gray-500">Bands:</span>{' '}
+            <span className="text-gray-500">{t('overview.bands')}</span>{' '}
             <span className="font-mono text-gray-900">{profile.eq.fixed_band.filters.length}</span>
           </div>
         </div>
@@ -253,6 +253,7 @@ function DownloadTab({
   profile: ProfileDetailType;
   csvData: CsvData | null;
 }) {
+  const { t } = useTranslation();
   const downloads = [
     {
       key: 'parametric',
@@ -274,7 +275,7 @@ function DownloadTab({
   return (
     <div className="space-y-4">
       <div className="bg-white rounded-lg border border-gray-200 p-4">
-        <h2 className="text-sm font-semibold text-gray-700 mb-3">Download EQ Presets</h2>
+        <h2 className="text-sm font-semibold text-gray-700 mb-3">{t('download.title')}</h2>
         <div className="space-y-2">
           {downloads.map((dl) => (
             <button
@@ -284,7 +285,7 @@ function DownloadTab({
             >
               <div>
                 <div className="text-sm font-medium text-gray-900">{dl.label}</div>
-                <div className="text-xs text-gray-500 mt-0.5">EqualizerAPO format</div>
+                <div className="text-xs text-gray-500 mt-0.5">{t('download.apoFormat')}</div>
               </div>
               <span className="text-gray-400 text-lg">&#8595;</span>
             </button>
@@ -293,7 +294,6 @@ function DownloadTab({
           {csvData && (
             <button
               onClick={() => {
-                // Reconstruct CSV from parsed data
                 const headers = 'frequency,raw,smoothed,error,error_smoothed,equalization,parametric_eq,fixed_band_eq,equalized_raw,equalized_smoothed,target';
                 const rows = csvData.frequency.map((_, i) =>
                   [
@@ -316,7 +316,7 @@ function DownloadTab({
             >
               <div>
                 <div className="text-sm font-medium text-gray-900">result.csv</div>
-                <div className="text-xs text-gray-500 mt-0.5">Frequency response data</div>
+                <div className="text-xs text-gray-500 mt-0.5">{t('download.freqData')}</div>
               </div>
               <span className="text-gray-400 text-lg">&#8595;</span>
             </button>
@@ -324,15 +324,14 @@ function DownloadTab({
         </div>
       </div>
 
-      {/* Download from source URLs */}
       {profile.files && (
         <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <h2 className="text-sm font-semibold text-gray-700 mb-3">Source Files</h2>
+          <h2 className="text-sm font-semibold text-gray-700 mb-3">{t('download.sourceFiles')}</h2>
           <div className="text-xs text-gray-500 space-y-1">
-            <p>Parametric: <span className="font-mono">{profile.files.parametric}</span></p>
-            <p>Fixed Band: <span className="font-mono">{profile.files.fixed_band}</span></p>
-            <p>Graphic: <span className="font-mono">{profile.files.graphic}</span></p>
-            <p>CSV: <span className="font-mono">{profile.files.csv}</span></p>
+            <p>{t('download.parametric')} <span className="font-mono">{profile.files.parametric}</span></p>
+            <p>{t('download.fixedBand')} <span className="font-mono">{profile.files.fixed_band}</span></p>
+            <p>{t('download.graphic')} <span className="font-mono">{profile.files.graphic}</span></p>
+            <p>{t('download.csv')} <span className="font-mono">{profile.files.csv}</span></p>
           </div>
         </div>
       )}

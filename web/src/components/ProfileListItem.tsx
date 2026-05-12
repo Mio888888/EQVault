@@ -1,3 +1,5 @@
+import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { ProfileIndex } from '../data/types';
 
 interface ProfileListItemProps {
@@ -10,21 +12,22 @@ const sourceColors: Record<string, string> = {
   crinacle: 'bg-blue-100 text-blue-800',
 };
 
-const formLabels: Record<string, string> = {
-  'over-ear': 'Over-ear',
-  'in-ear': 'In-ear',
-  'earbud': 'Earbud',
-};
-
 const formColors: Record<string, string> = {
   'over-ear': 'bg-purple-100 text-purple-800',
   'in-ear': 'bg-amber-100 text-amber-800',
   'earbud': 'bg-pink-100 text-pink-800',
 };
 
-export default function ProfileListItem({ profile, onClick }: ProfileListItemProps) {
+function ProfileListItemInner({ profile, onClick }: ProfileListItemProps) {
+  const { t } = useTranslation();
   const sourceBadge = sourceColors[profile.source] ?? 'bg-gray-100 text-gray-800';
   const formBadge = formColors[profile.form] ?? 'bg-gray-100 text-gray-800';
+
+  const formLabelMap: Record<string, string> = {
+    'over-ear': t('item.formOverEar'),
+    'in-ear': t('item.formInEar'),
+    'earbud': t('item.formEarbud'),
+  };
 
   return (
     <div
@@ -32,7 +35,7 @@ export default function ProfileListItem({ profile, onClick }: ProfileListItemPro
       onClick={() => onClick(profile.id)}
     >
       {profile.recommended && (
-        <span className="text-amber-400 text-sm shrink-0" title="Recommended">&#9733;</span>
+        <span className="text-amber-400 text-sm shrink-0" title={t('item.recommended')}>&#9733;</span>
       )}
       {!profile.recommended && <span className="w-3.5 shrink-0" />}
 
@@ -45,8 +48,10 @@ export default function ProfileListItem({ profile, onClick }: ProfileListItemPro
       </span>
 
       <span className={`text-xs px-1.5 py-0.5 rounded font-medium shrink-0 ${formBadge}`}>
-        {formLabels[profile.form] ?? profile.form}
+        {formLabelMap[profile.form] ?? profile.form}
       </span>
     </div>
   );
 }
+
+export default memo(ProfileListItemInner);

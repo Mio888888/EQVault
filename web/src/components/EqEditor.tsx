@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { EqPreset, EqFilter } from '../data/types';
 import FilterEditor from './FilterEditor';
 import { formatParametricEq } from '../lib/eqFormat';
@@ -12,6 +13,7 @@ interface EqEditorProps {
 }
 
 export default function EqEditor({ preset, workingPreset, onPresetChange, onReset }: EqEditorProps) {
+  const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
 
   const isModified =
@@ -59,7 +61,7 @@ export default function EqEditor({ preset, workingPreset, onPresetChange, onRese
     <div className="space-y-3">
       {/* Preamp editor */}
       <div className="flex items-center gap-3">
-        <label className="text-sm font-medium text-gray-700 shrink-0">Preamp:</label>
+        <label className="text-sm font-medium text-gray-700 shrink-0">{t('eq.preamp')}</label>
         <input
           type="number"
           value={workingPreset.preamp}
@@ -77,11 +79,11 @@ export default function EqEditor({ preset, workingPreset, onPresetChange, onRese
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-gray-200">
-              <th className="text-left py-1.5 px-2 text-gray-500 font-medium w-10">#</th>
-              <th className="text-left py-1.5 px-2 text-gray-500 font-medium w-12">Type</th>
-              <th className="text-right py-1.5 px-2 text-gray-500 font-medium">Freq (Hz)</th>
-              <th className="text-right py-1.5 px-2 text-gray-500 font-medium">Gain (dB)</th>
-              <th className="text-right py-1.5 px-2 text-gray-500 font-medium">Q</th>
+              <th className="text-left py-1.5 px-2 text-gray-500 font-medium w-10">{t('eq.colIndex')}</th>
+              <th className="text-left py-1.5 px-2 text-gray-500 font-medium w-12">{t('eq.colType')}</th>
+              <th className="text-right py-1.5 px-2 text-gray-500 font-medium">{t('eq.colFreq')}</th>
+              <th className="text-right py-1.5 px-2 text-gray-500 font-medium">{t('eq.colGain')}</th>
+              <th className="text-right py-1.5 px-2 text-gray-500 font-medium">{t('eq.colQ')}</th>
             </tr>
           </thead>
           <tbody>
@@ -104,23 +106,23 @@ export default function EqEditor({ preset, workingPreset, onPresetChange, onRese
           disabled={!isModified}
           className="px-3 py-1.5 rounded text-xs font-medium border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          Reset
+          {t('eq.reset')}
         </button>
         <button
           onClick={handleExport}
           className="px-3 py-1.5 rounded text-xs font-medium bg-blue-500 text-white hover:bg-blue-600 transition-colors"
         >
-          Export Modified
+          {t('eq.exportModified')}
         </button>
         <button
           onClick={handleCopy}
           className="px-3 py-1.5 rounded text-xs font-medium border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors"
         >
-          {copied ? 'Copied!' : 'Copy Modified'}
+          {copied ? t('eq.copied') : t('eq.copyModified')}
         </button>
         {isModified && (
           <span className="text-xs text-amber-600 ml-auto">
-            Modified
+            {t('eq.modified')}
           </span>
         )}
       </div>

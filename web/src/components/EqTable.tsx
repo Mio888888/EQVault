@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import type { EqFilter } from '../data/types';
 
 interface EqTableProps {
@@ -14,10 +15,11 @@ const typeLabels: Record<string, string> = {
 };
 
 export default function EqTable({ preamp, filters }: EqTableProps) {
+  const { t } = useTranslation();
   return (
     <div>
       <div className="flex items-center gap-2 mb-2">
-        <span className="text-sm font-medium text-gray-700">Preamp:</span>
+        <span className="text-sm font-medium text-gray-700">{t('eq.preamp')}</span>
         <span className="text-sm font-mono text-gray-900">{preamp > 0 ? '+' : ''}{preamp.toFixed(1)} dB</span>
       </div>
 
@@ -25,11 +27,11 @@ export default function EqTable({ preamp, filters }: EqTableProps) {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-gray-200">
-              <th className="text-left py-1.5 px-2 text-gray-500 font-medium w-10">#</th>
-              <th className="text-left py-1.5 px-2 text-gray-500 font-medium w-12">Type</th>
-              <th className="text-right py-1.5 px-2 text-gray-500 font-medium">Freq (Hz)</th>
-              <th className="text-right py-1.5 px-2 text-gray-500 font-medium">Gain (dB)</th>
-              <th className="text-right py-1.5 px-2 text-gray-500 font-medium">Q</th>
+              <th className="text-left py-1.5 px-2 text-gray-500 font-medium w-10">{t('eq.colIndex')}</th>
+              <th className="text-left py-1.5 px-2 text-gray-500 font-medium w-12">{t('eq.colType')}</th>
+              <th className="text-right py-1.5 px-2 text-gray-500 font-medium">{t('eq.colFreq')}</th>
+              <th className="text-right py-1.5 px-2 text-gray-500 font-medium">{t('eq.colGain')}</th>
+              <th className="text-right py-1.5 px-2 text-gray-500 font-medium">{t('eq.colQ')}</th>
             </tr>
           </thead>
           <tbody>

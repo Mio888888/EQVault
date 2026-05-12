@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import type { ProfileIndex, FilterState } from '../data/types';
 import { extractOptions } from '../lib/search';
 
@@ -8,6 +9,7 @@ interface FilterDropdownsProps {
 }
 
 export default function FilterDropdowns({ profiles, filters, onChange }: FilterDropdownsProps) {
+  const { t } = useTranslation();
   const sources = extractOptions(profiles, 'source');
   const forms = extractOptions(profiles, 'form');
   const rigs = extractOptions(profiles, 'rig');
@@ -25,9 +27,9 @@ export default function FilterDropdowns({ profiles, filters, onChange }: FilterD
         value={filters.source}
         onChange={(e) => handleChange('source', e.target.value)}
         className={selectClass}
-        aria-label="Filter by source"
+        aria-label={t('filter.bySource')}
       >
-        <option value="">All Sources</option>
+        <option value="">{t('filter.allSources')}</option>
         {sources.map((s) => (
           <option key={s} value={s}>{s}</option>
         ))}
@@ -37,9 +39,9 @@ export default function FilterDropdowns({ profiles, filters, onChange }: FilterD
         value={filters.form}
         onChange={(e) => handleChange('form', e.target.value)}
         className={selectClass}
-        aria-label="Filter by form"
+        aria-label={t('filter.byForm')}
       >
-        <option value="">All Forms</option>
+        <option value="">{t('filter.allForms')}</option>
         {forms.map((f) => (
           <option key={f} value={f}>{f}</option>
         ))}
@@ -49,9 +51,9 @@ export default function FilterDropdowns({ profiles, filters, onChange }: FilterD
         value={filters.rig}
         onChange={(e) => handleChange('rig', e.target.value)}
         className={selectClass}
-        aria-label="Filter by rig"
+        aria-label={t('filter.byRig')}
       >
-        <option value="">All Rigs</option>
+        <option value="">{t('filter.allRigs')}</option>
         {rigs.map((r) => (
           <option key={r} value={r}>{r}</option>
         ))}

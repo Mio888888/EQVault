@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState, type CSSProperties, type ReactElement } from 'react';
+import { useTranslation } from 'react-i18next';
 import { List } from 'react-window';
 import type { ProfileIndex } from '../data/types';
 import ProfileListItem from './ProfileListItem';
@@ -38,11 +39,11 @@ function RowComponent({
 }
 
 export default function ProfileList({ profiles, onSelect }: ProfileListProps) {
+  const { t } = useTranslation();
   const [listHeight, setListHeight] = useState(600);
 
   useEffect(() => {
     const updateHeight = () => {
-      // Use most of the viewport, leaving room for header/controls
       const height = Math.max(300, window.innerHeight - 280);
       setListHeight(height);
     };
@@ -59,7 +60,7 @@ export default function ProfileList({ profiles, onSelect }: ProfileListProps) {
   if (profiles.length === 0) {
     return (
       <div className="flex items-center justify-center py-12 text-gray-400 text-sm">
-        No profiles found
+        {t('list.empty')}
       </div>
     );
   }
