@@ -7,6 +7,7 @@ import {
   createPreampGain,
   connectEqGraph,
   connectBypassGraph,
+  setEqRouting,
   disconnectNodes,
   disconnectNode,
 } from '../lib/audioEngine';
@@ -202,11 +203,22 @@ export default function AudioPlayer({ preset }: AudioPlayerProps) {
     setEqEnabled(newEqEnabled);
     eqEnabledRef.current = newEqEnabled;
 
-    // When playing, fully rebuild the graph so the internal EQ node chain is
-    // re-established (a surgical reconnect would leave it broken). The token
-    // guard inside startPlayback serializes any overlapping rebuilds.
-    if (isPlayingRef.current) {
-      void startPlayback();
+    // While playing, re-route the live graph between EQ-engaged and bypass
+    // WITHOUT rebuilding the source node — setEqRouting only changes the
+    // preamp/volume boundary edges, so playback position is preserved
+    // (important for the frequency sweep tone). Internal eq[i]->eq[i+1]
+    // chain stays intact, fixing the earlier "off->on goes silent" bug.
+    if (
+      isPlayingRef.current &&
+      preampRef.current &&
+      volumeRef.current
+    ) {
+      setEqRouting(
+        preampRef.current,
+        eqNodesRef.current,
+        volumeRef.current,
+        newEqEnabled,
+      );
     }
   }
 

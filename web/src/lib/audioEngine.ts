@@ -103,6 +103,42 @@ export function connectBypassGraph(
 }
 
 /**
+ * Re-route the live graph between EQ-engaged and bypass WITHOUT rebuilding
+ * the source node (which would restart playback from buffer position 0).
+ *
+ * Only the routing edges at the preamp/volume boundaries are changed:
+ *   EQ on  : preamp -> eq[0], eq[last] -> volume
+ *   EQ off : preamp -> volume
+ *
+ * The internal eq[i] -> eq[i+1] chain (built once in createEqNodes) is never
+ * touched, and the source node is never disconnected — so playback position
+ * is preserved. Uses destination-specific disconnect() to surgically remove
+ * only the edges being replaced.
+ */
+export function setEqRouting(
+  preampGain: GainNode,
+  eqNodes: BiquadFilterNode[],
+  volumeNode: AudioNode,
+  eqEnabled: boolean,
+): void {
+  // Always clear the boundary edges first. Destination-specific disconnect
+  // leaves the internal eq chain intact.
+  if (eqNodes.length > 0) {
+    try { preampGain.disconnect(eqNodes[0]); } catch { /* not connected */ }
+    try { eqNodes[eqNodes.length - 1].disconnect(volumeNode); } catch { /* not connected */ }
+  }
+  try { preampGain.disconnect(volumeNode); } catch { /* not connected */ }
+
+  // Re-connect along the desired path. Internal eq chain already exists.
+  if (eqEnabled && eqNodes.length > 0) {
+    preampGain.connect(eqNodes[0]);
+    eqNodes[eqNodes.length - 1].connect(volumeNode);
+  } else {
+    preampGain.connect(volumeNode);
+  }
+}
+
+/**
  * Disconnect all connections from a set of EQ nodes.
  */
 export function disconnectNodes(nodes: AudioNode[]): void {
