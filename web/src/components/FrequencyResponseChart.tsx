@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect, type RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   LineChart,
@@ -8,7 +8,6 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer,
 } from 'recharts';
 import type { CsvData } from '../lib/csv';
 import { toChartData } from '../lib/csv';
@@ -47,6 +46,38 @@ const CURVES: CurveConfig[] = [
   { key: 'equalized_raw', nameKey: 'chart.equalized', color: '#ffb380' },
 ];
 
+const CHART_HEIGHT = 320;
+
+/**
+ * Track an element's pixel width via ResizeObserver. Returns 0 until the
+ * first measurement lands, which the caller uses to gate rendering so the
+ * chart never receives a zero/-1 width (the source of Recharts'
+ * "width(-1)... should be greater than 0" warning).
+ */
+function useElementWidth<T extends HTMLElement>(): [RefObject<T | null>, number] {
+  const ref = useRef<T>(null);
+  const [width, setWidth] = useState(0);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const update = () => setWidth(el.clientWidth);
+    update();
+
+    const observer = new ResizeObserver((entries) => {
+      // ResizeObserver fires for the observed element; use contentRect width.
+      const w = entries[0]?.contentRect.width;
+      if (typeof w === 'number') setWidth(w);
+    });
+    observer.observe(el);
+
+    return () => observer.disconnect();
+  }, []);
+
+  return [ref, width];
+}
+
 export default function FrequencyResponseChart({ data }: FrequencyResponseChartProps) {
   const { t } = useTranslation();
   const [visible, setVisible] = useState<Record<string, boolean>>({
@@ -56,6 +87,8 @@ export default function FrequencyResponseChart({ data }: FrequencyResponseChartP
     equalized_raw: true,
   });
 
+  const [containerRef, width] = useElementWidth<HTMLDivElement>();
+
   const chartData = useMemo(() => toChartData(data), [data]);
 
   const toggleCurve = (key: string) => {
@@ -64,9 +97,13 @@ export default function FrequencyResponseChart({ data }: FrequencyResponseChartP
 
   return (
     <div>
-      <div className="w-full" style={{ height: 320 }}>
-        <ResponsiveContainer width="100%" height="100%">
+      <div ref={containerRef} className="w-full" style={{ height: CHART_HEIGHT }}>
+        {/* Only render the chart once we have a real pixel width, so Recharts
+            never receives a zero/-1 width (the source of its measurement warning). */}
+        {width > 0 && (
           <LineChart
+            width={width}
+            height={CHART_HEIGHT}
             data={chartData}
             margin={{ top: 5, right: 10, left: 0, bottom: 25 }}
           >
@@ -128,7 +165,7 @@ export default function FrequencyResponseChart({ data }: FrequencyResponseChartP
               />
             ))}
           </LineChart>
-        </ResponsiveContainer>
+        )}
       </div>
 
       <div className="flex flex-wrap gap-3 mt-2 justify-center">
