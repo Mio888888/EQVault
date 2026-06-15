@@ -1,14 +1,82 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Browse and download AutoEq headphone EQ presets. Search, preview, fine-tune, and export EqualizerAPO configurations." />
+
+    <!-- Primary meta tags -->
+    <title>EQVault · 耳机 EQ 预设浏览与微调工具</title>
+    <meta
+      name="description"
+      content="EQVault 是基于 AutoEq 的耳机 EQ 预设浏览与微调工具。在线搜索、预览频率响应、试听对比、手动微调并下载 Equalizer APO 配置，无需后端。"
+    />
+    <meta
+      name="keywords"
+      content="EQ, AutoEq, 耳机, 均衡器, EQ 预设, headphone, equalizer, Equalizer APO, ParametricEQ, 频率响应, frequency response, oratory1990, crinacle"
+    />
+    <meta name="author" content="EQVault" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#E65C00" />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-    <title>EQVault</title>
+
+    <!-- Canonical: resolves duplicate-content across deployment mirrors -->
+    <link rel="canonical" href="https://mio888888.github.io/EQVault/" />
+
+    <!-- Open Graph / social sharing (Facebook, LinkedIn, Discord, etc.) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="EQVault" />
+    <meta property="og:title" content="EQVault · 耳机 EQ 预设浏览与微调工具" />
+    <meta
+      property="og:description"
+      content="基于 AutoEq 的耳机 EQ 预设浏览与微调工具。在线搜索、预览、试听对比、微调并下载 Equalizer APO 配置。"
+    />
+    <meta property="og:url" content="https://mio888888.github.io/EQVault/" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:locale:alternate" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="EQVault · 耳机 EQ 预设浏览与微调工具" />
+    <meta
+      name="twitter:description"
+      content="基于 AutoEq 的耳机 EQ 预设浏览与微调工具。在线搜索、预览、试听对比、微调并下载 Equalizer APO 配置。"
+    />
+
+    <!-- Structured data: helps search engines understand the app type -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "EQVault",
+        "url": "https://mio888888.github.io/EQVault/",
+        "description": "基于 AutoEq 的耳机 EQ 预设浏览与微调工具，支持在线搜索、频率响应预览、试听对比与 Equalizer APO 配置导出。",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "Web",
+        "inLanguage": ["zh-CN", "en"],
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
+    <!-- SEO/crawler fallback: this app is a client-rendered SPA, so crawlers
+         that don't execute JS still get meaningful content to index. -->
+    <noscript>
+      <div style="max-width: 640px; margin: 2rem auto; padding: 0 1rem; font-family: sans-serif;">
+        <h1>EQVault · 耳机 EQ 预设浏览与微调工具</h1>
+        <p>
+          EQVault 是基于 <a href="https://github.com/jaakkopasanen/AutoEq">AutoEq</a> 的耳机 EQ 预设浏览与微调工具。
+          支持在线搜索耳机型号、预览频率响应曲线、试听 EQ 效果对比（含自定义音频上传）、
+          手动微调滤波器参数，并一键下载 Equalizer APO / ParametricEQ / FixedBandEQ / GraphicEQ 配置。
+        </p>
+        <p>本应用需要启用 JavaScript 才能运行，请在浏览器设置中开启 JavaScript。</p>
+        <p>This is a headphone EQ preset browser and fine-tuning tool built on AutoEq. Please enable JavaScript to use it.</p>
+      </div>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
