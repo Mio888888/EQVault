@@ -2,13 +2,15 @@ import { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ProfileDetail as ProfileDetailType, EqPreset } from '../data/types';
 import EqTable from './EqTable';
-import AudioPlayer from './AudioPlayer';
+import AudioPlayer, { type UploadedAudio } from './AudioPlayer';
 import EqEditor from './EqEditor';
 
 interface EqTabProps {
   profile: ProfileDetailType;
   onCopy: (key: string, text: string) => void;
   copiedKey: string | null;
+  uploadedAudio: UploadedAudio;
+  onUploadedAudioChange: (audio: UploadedAudio) => void;
 }
 
 function formatEqText(preamp: number, filters: { type: string; fc: number; gain: number; q: number }[]): string {
@@ -29,7 +31,7 @@ function formatEqText(preamp: number, filters: { type: string; fc: number; gain:
   return text.trim();
 }
 
-export default function EqTab({ profile, onCopy, copiedKey }: EqTabProps) {
+export default function EqTab({ profile, onCopy, copiedKey, uploadedAudio, onUploadedAudioChange }: EqTabProps) {
   const { t } = useTranslation();
   const [editingParametric, setEditingParametric] = useState(false);
   const [workingParametric, setWorkingParametric] = useState<EqPreset>(profile.eq.parametric);
@@ -48,7 +50,11 @@ export default function EqTab({ profile, onCopy, copiedKey }: EqTabProps) {
   return (
     <div className="space-y-4">
       {editingParametric && (
-        <AudioPlayer preset={audioPreset} />
+        <AudioPlayer
+          preset={audioPreset}
+          uploadedAudio={uploadedAudio}
+          onUploadedAudioChange={onUploadedAudioChange}
+        />
       )}
 
       <div className="bg-surface rounded-card border border-line shadow-card p-4">

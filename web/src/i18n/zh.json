@@ -94,7 +94,14 @@
     "eqPending": "EQ 已关闭，将在播放时生效",
     "playing": "正在播放 {{tone}}，EQ {{state}}",
     "idle": "选择测试信号并点击播放以试听",
-    "playError": "音频播放失败"
+    "playError": "音频播放失败",
+    "customAudio": "自定义音频",
+    "upload": "上传",
+    "uploadHint": "请先上传音频文件",
+    "decoding": "解码中…",
+    "uploadError": "音频文件解码失败",
+    "clear": "移除",
+    "unsupportedType": "不支持的音频格式"
   },
   "chart": {
     "raw": "原始",

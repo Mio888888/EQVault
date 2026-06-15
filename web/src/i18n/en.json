@@ -94,7 +94,14 @@
     "eqPending": "EQ bypassed — takes effect on next play",
     "playing": "Playing {{tone}} with EQ {{state}}",
     "idle": "Select a test tone and press play to listen",
-    "playError": "Failed to play audio"
+    "playError": "Failed to play audio",
+    "customAudio": "Custom Audio",
+    "upload": "Upload",
+    "uploadHint": "Upload an audio file first",
+    "decoding": "Decoding…",
+    "uploadError": "Failed to decode audio file",
+    "clear": "Remove",
+    "unsupportedType": "Unsupported audio format"
   },
   "chart": {
     "raw": "Raw",

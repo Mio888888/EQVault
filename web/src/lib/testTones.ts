@@ -102,13 +102,14 @@ export function generateSweep(
   return buffer;
 }
 
-export type TestToneType = 'pink' | 'white' | 'sweep';
+export type TestToneType = 'pink' | 'white' | 'sweep' | 'file';
 
 /** Duration of generated test tones in seconds */
 const TONE_DURATION = 8;
 
 /**
  * Create a looping AudioBufferSourceNode for the selected test tone type.
+ * For 'file', the caller must supply a pre-decoded buffer via createFileSource.
  */
 export function createTestToneSource(
   audioContext: AudioContext,
@@ -126,8 +127,26 @@ export function createTestToneSource(
     case 'sweep':
       buffer = generateSweep(audioContext, TONE_DURATION);
       break;
+    case 'file':
+      // 'file' is handled separately via createFileSource; reaching here is a bug.
+      throw new Error("createTestToneSource('file') is not supported — use createFileSource instead");
   }
 
+  const source = audioContext.createBufferSource();
+  source.buffer = buffer;
+  source.loop = true;
+  return source;
+}
+
+/**
+ * Create a looping AudioBufferSourceNode from a user-uploaded, decoded buffer.
+ * Loops (same as generated tones) so the user can A/B-test the EQ on/off
+ * against their own track continuously.
+ */
+export function createFileSource(
+  audioContext: AudioContext,
+  buffer: AudioBuffer,
+): AudioBufferSourceNode {
   const source = audioContext.createBufferSource();
   source.buffer = buffer;
   source.loop = true;

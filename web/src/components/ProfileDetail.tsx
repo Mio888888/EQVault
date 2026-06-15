@@ -5,7 +5,7 @@ import { useProfile } from '../hooks/useData';
 import { parseAutoEqCsv, type CsvData } from '../lib/csv';
 import { downloadText, copyToClipboard } from '../lib/download';
 import FrequencyResponseChart from './FrequencyResponseChart';
-import AudioPlayer from './AudioPlayer';
+import AudioPlayer, { type UploadedAudio } from './AudioPlayer';
 import EqTab from './EqTab';
 
 interface ProfileDetailProps {
@@ -22,6 +22,9 @@ export default function ProfileDetail({ profileId, onBack }: ProfileDetailProps)
   const [csvData, setCsvData] = useState<CsvData | null>(null);
   const [csvError, setCsvError] = useState(false);
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  // Lifted uploaded-audio state: survives Overview↔EQ↔Download tab switches
+  // and the EqTab edit toggle, since each unmounts the AudioPlayer.
+  const [uploadedAudio, setUploadedAudio] = useState<UploadedAudio>({ buffer: null, fileName: null });
   const csvLoading = csvData === null && !csvError && !!profile?.files?.csv;
 
   const TABS: { id: TabId; label: string }[] = [
@@ -144,7 +147,13 @@ export default function ProfileDetail({ profileId, onBack }: ProfileDetailProps)
       {/* Tab content */}
       <main className="max-w-4xl mx-auto px-4 py-4">
         {activeTab === 'overview' && (
-          <OverviewTab profile={profile} csvData={csvData} csvLoading={csvLoading} />
+          <OverviewTab
+            profile={profile}
+            csvData={csvData}
+            csvLoading={csvLoading}
+            uploadedAudio={uploadedAudio}
+            onUploadedAudioChange={setUploadedAudio}
+          />
         )}
         {activeTab === 'eq' && (
           <EqTab
@@ -152,6 +161,8 @@ export default function ProfileDetail({ profileId, onBack }: ProfileDetailProps)
             profile={profile}
             onCopy={handleCopy}
             copiedKey={copiedKey}
+            uploadedAudio={uploadedAudio}
+            onUploadedAudioChange={setUploadedAudio}
           />
         )}
         {activeTab === 'download' && (
@@ -168,10 +179,14 @@ function OverviewTab({
   profile,
   csvData,
   csvLoading,
+  uploadedAudio,
+  onUploadedAudioChange,
 }: {
   profile: ProfileDetailType;
   csvData: CsvData | null;
   csvLoading: boolean;
+  uploadedAudio: UploadedAudio;
+  onUploadedAudioChange: (audio: UploadedAudio) => void;
 }) {
   const { t } = useTranslation();
   return (
@@ -193,7 +208,11 @@ function OverviewTab({
         )}
       </div>
 
-      <AudioPlayer preset={profile.eq.parametric} />
+      <AudioPlayer
+        preset={profile.eq.parametric}
+        uploadedAudio={uploadedAudio}
+        onUploadedAudioChange={onUploadedAudioChange}
+      />
 
       <div className="bg-surface rounded-card border border-line shadow-card p-4">
         <h2 className="text-sm font-semibold text-ink mb-2">{t('overview.eqSummary')}</h2>
