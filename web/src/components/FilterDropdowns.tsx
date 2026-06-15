@@ -19,7 +19,7 @@ export default function FilterDropdowns({ profiles, filters, onChange }: FilterD
   };
 
   const selectClass =
-    'rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer';
+    'rounded-control border border-line bg-cream px-3 py-2 text-sm text-ink-600 transition-colors focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer';
 
   return (
     <div className="flex gap-2 flex-wrap">

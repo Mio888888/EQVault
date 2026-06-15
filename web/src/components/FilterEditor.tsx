@@ -37,10 +37,10 @@ export default function FilterEditor({ filter, index, onChange }: FilterEditorPr
   }
 
   return (
-    <tr className="border-b border-gray-100 hover:bg-gray-50">
-      <td className="py-1.5 px-2 text-gray-400 text-sm">{index + 1}</td>
+    <tr className="border-b border-line/60 hover:bg-cream transition-colors">
+      <td className="py-1.5 px-2 text-ink-600/70 text-sm">{index + 1}</td>
       <td className="py-1.5 px-2">
-        <span className="inline-block px-1.5 py-0.5 bg-gray-100 rounded text-xs font-mono text-gray-700">
+        <span className="inline-block px-1.5 py-0.5 bg-cream rounded-control text-xs font-mono text-primary">
           {typeLabels[filter.type]}
         </span>
       </td>
@@ -52,7 +52,7 @@ export default function FilterEditor({ filter, index, onChange }: FilterEditorPr
           step={1}
           min={20}
           max={20000}
-          className="w-20 text-right font-mono text-sm border border-gray-200 rounded px-1.5 py-0.5 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400"
+          className="w-20 text-right font-mono text-sm border border-line bg-cream rounded-control px-1.5 py-0.5 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
         />
       </td>
       <td className="py-1.5 px-2">
@@ -63,7 +63,7 @@ export default function FilterEditor({ filter, index, onChange }: FilterEditorPr
           step={0.1}
           min={-20}
           max={20}
-          className="w-18 text-right font-mono text-sm border border-gray-200 rounded px-1.5 py-0.5 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400"
+          className="w-18 text-right font-mono text-sm border border-line bg-cream rounded-control px-1.5 py-0.5 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
         />
       </td>
       <td className="py-1.5 px-2">
@@ -74,7 +74,7 @@ export default function FilterEditor({ filter, index, onChange }: FilterEditorPr
           step={0.01}
           min={0.01}
           max={20}
-          className="w-18 text-right font-mono text-sm border border-gray-200 rounded px-1.5 py-0.5 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400"
+          className="w-18 text-right font-mono text-sm border border-line bg-cream rounded-control px-1.5 py-0.5 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
         />
       </td>
     </tr>

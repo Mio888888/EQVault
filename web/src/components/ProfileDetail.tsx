@@ -69,7 +69,7 @@ export default function ProfileDetail({ profileId, onBack }: ProfileDetailProps)
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-16 text-gray-400 text-sm">
+      <div className="flex items-center justify-center py-16 text-ink-600/70 text-sm">
         {t('detail.loading')}
       </div>
     );
@@ -80,11 +80,11 @@ export default function ProfileDetail({ profileId, onBack }: ProfileDetailProps)
       <div className="px-4 py-8">
         <button
           onClick={onBack}
-          className="text-blue-600 hover:text-blue-800 text-sm mb-4 inline-flex items-center gap-1"
+          className="text-primary hover:text-primary-600 text-sm mb-4 inline-flex items-center gap-1 transition-colors"
         >
           &larr; {t('detail.back')}
         </button>
-        <div className="bg-red-50 text-red-700 text-sm rounded-lg p-4">
+        <div className="bg-red-50 text-red-700 text-sm rounded-card p-4">
           {t('detail.loadError', { error: error ?? t('detail.unknownError') })}
         </div>
       </div>
@@ -92,29 +92,29 @@ export default function ProfileDetail({ profileId, onBack }: ProfileDetailProps)
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-cream">
       {/* Header with back button */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <header className="bg-cream/95 backdrop-blur border-b border-line sticky top-0 z-10 animate-rise-in">
         <div className="max-w-4xl mx-auto px-4 py-3">
           <button
             onClick={onBack}
-            className="text-blue-600 hover:text-blue-800 text-sm mb-2 inline-flex items-center gap-1"
+            className="text-primary hover:text-primary-600 text-sm mb-2 inline-flex items-center gap-1 transition-colors"
           >
             &larr; {t('detail.backToList')}
           </button>
           <div className="flex items-start gap-3">
             <div className="flex-1 min-w-0">
-              <h1 className="text-lg font-bold text-gray-900 truncate">{profile.name}</h1>
+              <h1 className="text-lg font-semibold text-ink truncate">{profile.name}</h1>
               <div className="flex flex-wrap items-center gap-2 mt-1">
-                <span className="text-xs px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-medium">
+                <span className="text-xs px-2 py-0.5 rounded-control bg-primary/12 text-primary font-medium">
                   {profile.source}
                 </span>
-                <span className="text-xs px-2 py-0.5 rounded bg-purple-100 text-purple-800 font-medium">
+                <span className="text-xs px-2 py-0.5 rounded-control bg-violet-100/60 text-violet-800 font-medium">
                   {profile.form}
                 </span>
-                <span className="text-xs text-gray-500">{profile.rig}</span>
+                <span className="text-xs text-ink-600 font-mono">{profile.rig}</span>
                 {profile.recommended && (
-                  <span className="text-xs px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-medium">
+                  <span className="text-xs px-2 py-0.5 rounded-control bg-accent/30 text-primary font-medium">
                     &#9733; {t('item.recommended')}
                   </span>
                 )}
@@ -130,8 +130,8 @@ export default function ProfileDetail({ profileId, onBack }: ProfileDetailProps)
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
                   activeTab === tab.id
-                    ? 'border-blue-600 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                    ? 'border-primary text-primary'
+                    : 'border-transparent text-ink-600 hover:text-ink'
                 }`}
               >
                 {tab.label}
@@ -176,10 +176,10 @@ function OverviewTab({
   const { t } = useTranslation();
   return (
     <div className="space-y-4">
-      <div className="bg-white rounded-lg border border-gray-200 p-4">
-        <h2 className="text-sm font-semibold text-gray-700 mb-3">{t('overview.freqResponse')}</h2>
+      <div className="bg-surface rounded-card border border-line shadow-card p-4">
+        <h2 className="text-sm font-semibold text-ink mb-3">{t('overview.freqResponse')}</h2>
         {csvLoading && (
-          <div className="flex items-center justify-center py-12 text-gray-400 text-sm">
+          <div className="flex items-center justify-center py-12 text-ink-600/70 text-sm">
             {t('overview.chartLoading')}
           </div>
         )}
@@ -187,7 +187,7 @@ function OverviewTab({
           <FrequencyResponseChart data={csvData} />
         )}
         {!csvLoading && !csvData && (
-          <div className="flex items-center justify-center py-12 text-gray-400 text-sm">
+          <div className="flex items-center justify-center py-12 text-ink-600/70 text-sm">
             {t('overview.noData')}
           </div>
         )}
@@ -195,30 +195,30 @@ function OverviewTab({
 
       <AudioPlayer preset={profile.eq.parametric} />
 
-      <div className="bg-white rounded-lg border border-gray-200 p-4">
-        <h2 className="text-sm font-semibold text-gray-700 mb-2">{t('overview.eqSummary')}</h2>
+      <div className="bg-surface rounded-card border border-line shadow-card p-4">
+        <h2 className="text-sm font-semibold text-ink mb-2">{t('overview.eqSummary')}</h2>
         <div className="grid grid-cols-2 gap-3 text-sm">
           <div>
-            <span className="text-gray-500">{t('overview.parametricPreamp')}</span>{' '}
-            <span className="font-mono text-gray-900">
+            <span className="text-ink-600">{t('overview.parametricPreamp')}</span>{' '}
+            <span className="font-mono text-ink">
               {profile.eq.parametric.preamp > 0 ? '+' : ''}
               {profile.eq.parametric.preamp.toFixed(1)} dB
             </span>
           </div>
           <div>
-            <span className="text-gray-500">{t('overview.filters')}</span>{' '}
-            <span className="font-mono text-gray-900">{profile.eq.parametric.filters.length}</span>
+            <span className="text-ink-600">{t('overview.filters')}</span>{' '}
+            <span className="font-mono text-ink">{profile.eq.parametric.filters.length}</span>
           </div>
           <div>
-            <span className="text-gray-500">{t('overview.fixedBandPreamp')}</span>{' '}
-            <span className="font-mono text-gray-900">
+            <span className="text-ink-600">{t('overview.fixedBandPreamp')}</span>{' '}
+            <span className="font-mono text-ink">
               {profile.eq.fixed_band.preamp > 0 ? '+' : ''}
               {profile.eq.fixed_band.preamp.toFixed(1)} dB
             </span>
           </div>
           <div>
-            <span className="text-gray-500">{t('overview.bands')}</span>{' '}
-            <span className="font-mono text-gray-900">{profile.eq.fixed_band.filters.length}</span>
+            <span className="text-ink-600">{t('overview.bands')}</span>{' '}
+            <span className="font-mono text-ink">{profile.eq.fixed_band.filters.length}</span>
           </div>
         </div>
       </div>
@@ -274,20 +274,20 @@ function DownloadTab({
 
   return (
     <div className="space-y-4">
-      <div className="bg-white rounded-lg border border-gray-200 p-4">
-        <h2 className="text-sm font-semibold text-gray-700 mb-3">{t('download.title')}</h2>
+      <div className="bg-surface rounded-card border border-line shadow-card p-4">
+        <h2 className="text-sm font-semibold text-ink mb-3">{t('download.title')}</h2>
         <div className="space-y-2">
           {downloads.map((dl) => (
             <button
               key={dl.key}
               onClick={dl.action}
-              className="w-full flex items-center justify-between px-4 py-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors text-left"
+              className="w-full flex items-center justify-between px-4 py-3 rounded-control border border-line bg-cream hover:border-primary hover:-translate-y-0.5 hover:shadow-card transition-all text-left"
             >
               <div>
-                <div className="text-sm font-medium text-gray-900">{dl.label}</div>
-                <div className="text-xs text-gray-500 mt-0.5">{t('download.apoFormat')}</div>
+                <div className="text-sm font-medium text-ink font-mono">{dl.label}</div>
+                <div className="text-xs text-ink-600 mt-0.5">{t('download.apoFormat')}</div>
               </div>
-              <span className="text-gray-400 text-lg">&#8595;</span>
+              <span className="text-primary text-lg">&#8595;</span>
             </button>
           ))}
 
@@ -312,26 +312,26 @@ function DownloadTab({
                 );
                 downloadText('result.csv', headers + '\n' + rows.join('\n'));
               }}
-              className="w-full flex items-center justify-between px-4 py-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors text-left"
+              className="w-full flex items-center justify-between px-4 py-3 rounded-control border border-line bg-cream hover:border-primary hover:-translate-y-0.5 hover:shadow-card transition-all text-left"
             >
               <div>
-                <div className="text-sm font-medium text-gray-900">result.csv</div>
-                <div className="text-xs text-gray-500 mt-0.5">{t('download.freqData')}</div>
+                <div className="text-sm font-medium text-ink font-mono">result.csv</div>
+                <div className="text-xs text-ink-600 mt-0.5">{t('download.freqData')}</div>
               </div>
-              <span className="text-gray-400 text-lg">&#8595;</span>
+              <span className="text-primary text-lg">&#8595;</span>
             </button>
           )}
         </div>
       </div>
 
       {profile.files && (
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <h2 className="text-sm font-semibold text-gray-700 mb-3">{t('download.sourceFiles')}</h2>
-          <div className="text-xs text-gray-500 space-y-1">
-            <p>{t('download.parametric')} <span className="font-mono">{profile.files.parametric}</span></p>
-            <p>{t('download.fixedBand')} <span className="font-mono">{profile.files.fixed_band}</span></p>
-            <p>{t('download.graphic')} <span className="font-mono">{profile.files.graphic}</span></p>
-            <p>{t('download.csv')} <span className="font-mono">{profile.files.csv}</span></p>
+        <div className="bg-surface rounded-card border border-line shadow-card p-4">
+          <h2 className="text-sm font-semibold text-ink mb-3">{t('download.sourceFiles')}</h2>
+          <div className="text-xs text-ink-600 space-y-1">
+            <p>{t('download.parametric')} <span className="font-mono text-ink">{profile.files.parametric}</span></p>
+            <p>{t('download.fixedBand')} <span className="font-mono text-ink">{profile.files.fixed_band}</span></p>
+            <p>{t('download.graphic')} <span className="font-mono text-ink">{profile.files.graphic}</span></p>
+            <p>{t('download.csv')} <span className="font-mono text-ink">{profile.files.csv}</span></p>
           </div>
         </div>
       )}

@@ -41,10 +41,10 @@ interface CurveConfig {
 }
 
 const CURVES: CurveConfig[] = [
-  { key: 'raw', nameKey: 'chart.raw', color: '#3b82f6' },
+  { key: 'raw', nameKey: 'chart.raw', color: '#9ca3af' },
   { key: 'target', nameKey: 'chart.target', color: '#22c55e', dashArray: '5 3' },
-  { key: 'equalization', nameKey: 'chart.equalization', color: '#f97316' },
-  { key: 'equalized_raw', nameKey: 'chart.equalized', color: '#ef4444' },
+  { key: 'equalization', nameKey: 'chart.equalization', color: '#e65c00' },
+  { key: 'equalized_raw', nameKey: 'chart.equalized', color: '#ffb380' },
 ];
 
 export default function FrequencyResponseChart({ data }: FrequencyResponseChartProps) {
@@ -146,7 +146,7 @@ export default function FrequencyResponseChart({ data }: FrequencyResponseChartP
               }}
             />
             <span
-              className={visible[curve.key] ? 'text-gray-700' : 'text-gray-400 line-through'}
+              className={visible[curve.key] ? 'text-ink-600' : 'text-ink-600/50 line-through'}
             >
               {t(curve.nameKey)}
             </span>

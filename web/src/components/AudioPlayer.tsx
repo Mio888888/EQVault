@@ -33,6 +33,10 @@ export default function AudioPlayer({ preset }: AudioPlayerProps) {
   const isPlayingRef = useRef(isPlaying);
   const volumeValRef = useRef(volume);
   const presetRef = useRef(preset);
+  // Monotonic token guarding async startPlayback against concurrent
+  // pause / tone-switch / eq-toggle. Each kickoff bumps the token; an
+  // in-flight startPlayback aborts if the token changed under it.
+  const playbackTokenRef = useRef(0);
 
   const toneLabels: Record<TestToneType, string> = {
     pink: t('audio.pinkNoise'),
@@ -79,7 +83,62 @@ export default function AudioPlayer({ preset }: AudioPlayerProps) {
     }
   }, [preset]);
 
-  function cleanup() {
+  // Live tone switching: if playing, seamlessly rebuild the source with the new tone.
+  useEffect(() => {
+    if (!isPlayingRef.current) return;
+    void startPlayback();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [toneType]);
+
+  /**
+   * Build the audio graph for the current tone/EQ/volume and start playback.
+   * Tears down any existing graph first (synchronously, before the await).
+   * Token-guarded: if a concurrent pause/toggle/tone-switch bumps the token
+   * while we're awaiting the AudioContext resume, this kickoff aborts and
+   * cleans up instead of racing onto a stale graph.
+   *
+   * Always rebuilds the whole graph rather than surgically reconnecting —
+   * this avoids the bug where toggling EQ off then on severed the internal
+   * eq[i]→eq[i+1] chain (built once in createEqNodes) and never restored it,
+   * leaving the graph dead on the second "EQ on".
+   */
+  async function startPlayback() {
+    const token = ++playbackTokenRef.current;
+    cleanupNodes();
+
+    const ctx = await ensureAudioContextResumed();
+    // A concurrent pause/toggle happened during the await — drop this graph.
+    if (token !== playbackTokenRef.current) {
+      return;
+    }
+    audioContextRef.current = ctx;
+
+    const volumeNode = ctx.createGain();
+    volumeNode.gain.value = volumeValRef.current;
+    volumeRef.current = volumeNode;
+
+    const preampNode = createPreampGain(ctx, presetRef.current.preamp);
+    preampRef.current = preampNode;
+
+    const eqNodes = createEqNodes(ctx, presetRef.current);
+    eqNodesRef.current = eqNodes;
+
+    const source = createTestToneSource(ctx, toneType);
+    sourceRef.current = source;
+
+    if (eqEnabledRef.current) {
+      connectEqGraph(source, preampNode, eqNodes, volumeNode);
+    } else {
+      connectBypassGraph(source, preampNode, volumeNode);
+    }
+
+    volumeNode.connect(ctx.destination);
+    source.start();
+    setIsPlaying(true);
+  }
+
+  /** Tear down audio nodes only (no React state changes). Safe to call mid-rebuild. */
+  function cleanupNodes() {
     if (sourceRef.current) {
       try {
         sourceRef.current.stop();
@@ -103,47 +162,30 @@ export default function AudioPlayer({ preset }: AudioPlayerProps) {
       disconnectNode(volumeRef.current);
       volumeRef.current = null;
     }
+  }
 
+  /** Tear down the audio graph and clear playing/error state. */
+  function cleanup() {
+    // Invalidate any in-flight startPlayback so it won't re-arm the graph.
+    playbackTokenRef.current++;
+    cleanupNodes();
     setIsPlaying(false);
     setError(null);
   }
 
+  // Unmount-only teardown. Intentionally empty deps — we must not re-run on
+  // every render, and `cleanup` reads only refs + setState (stable identity).
   useEffect(() => {
     return () => {
       cleanup();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function handlePlay() {
     try {
       setError(null);
-      cleanup();
-
-      const ctx = await ensureAudioContextResumed();
-      audioContextRef.current = ctx;
-
-      const volumeNode = ctx.createGain();
-      volumeNode.gain.value = volumeValRef.current;
-      volumeRef.current = volumeNode;
-
-      const preampNode = createPreampGain(ctx, presetRef.current.preamp);
-      preampRef.current = preampNode;
-
-      const eqNodes = createEqNodes(ctx, presetRef.current);
-      eqNodesRef.current = eqNodes;
-
-      const source = createTestToneSource(ctx, toneType);
-      sourceRef.current = source;
-
-      if (eqEnabledRef.current) {
-        connectEqGraph(source, preampNode, eqNodes, volumeNode);
-      } else {
-        connectBypassGraph(source, preampNode, volumeNode);
-      }
-
-      volumeNode.connect(ctx.destination);
-      source.start();
-      setIsPlaying(true);
+      await startPlayback();
     } catch (err) {
       console.error('Audio playback error:', err);
       setError(err instanceof Error ? err.message : t('audio.playError'));
@@ -160,47 +202,31 @@ export default function AudioPlayer({ preset }: AudioPlayerProps) {
     setEqEnabled(newEqEnabled);
     eqEnabledRef.current = newEqEnabled;
 
-    if (!isPlayingRef.current || !audioContextRef.current || !sourceRef.current || !preampRef.current || !volumeRef.current) {
-      return;
+    // When playing, fully rebuild the graph so the internal EQ node chain is
+    // re-established (a surgical reconnect would leave it broken). The token
+    // guard inside startPlayback serializes any overlapping rebuilds.
+    if (isPlayingRef.current) {
+      void startPlayback();
     }
-
-    const ctx = audioContextRef.current;
-    const source = sourceRef.current;
-    const preamp = preampRef.current;
-    const volumeNode = volumeRef.current;
-    const eqNodes = eqNodesRef.current;
-
-    disconnectNode(preamp);
-    disconnectNodes(eqNodes);
-    disconnectNode(volumeNode);
-
-    if (newEqEnabled) {
-      connectEqGraph(source, preamp, eqNodes, volumeNode);
-    } else {
-      connectBypassGraph(source, preamp, volumeNode);
-    }
-
-    volumeNode.connect(ctx.destination);
   }
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-4">
-      <h2 className="text-sm font-semibold text-gray-700 mb-3">{t('audio.listen')}</h2>
+    <div className="bg-surface rounded-card border border-line shadow-card p-4">
+      <h2 className="text-sm font-semibold text-ink mb-3">{t('audio.listen')}</h2>
 
       {error && (
-        <div className="text-xs text-red-600 bg-red-50 rounded px-3 py-2 mb-3">
+        <div className="text-xs text-red-600 bg-red-50 rounded-control px-3 py-2 mb-3">
           {error}
         </div>
       )}
 
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-3">
-          <label className="text-xs text-gray-500 w-16 shrink-0">{t('audio.tone')}</label>
+          <label className="text-xs text-ink-600 w-16 shrink-0">{t('audio.tone')}</label>
           <select
             value={toneType}
             onChange={(e) => setToneType(e.target.value as TestToneType)}
-            disabled={isPlaying}
-            className="flex-1 text-sm border border-gray-300 rounded px-2 py-1.5 bg-white disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 text-sm border border-line bg-cream rounded-control px-2 py-1.5 text-ink-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
           >
             {Object.entries(toneLabels).map(([value, label]) => (
               <option key={value} value={value}>
@@ -213,11 +239,8 @@ export default function AudioPlayer({ preset }: AudioPlayerProps) {
         <div className="flex items-center gap-3">
           <button
             onClick={isPlaying ? handlePause : handlePlay}
-            className={`w-9 h-9 flex items-center justify-center rounded-full border-2 transition-colors shrink-0 ${
-              isPlaying
-                ? 'border-red-400 text-red-500 hover:bg-red-50'
-                : 'border-blue-400 text-blue-500 hover:bg-blue-50'
-            }`}
+            aria-label={isPlaying ? t('audio.pause') : t('audio.play')}
+            className="w-9 h-9 flex items-center justify-center rounded-full border-2 border-primary text-primary hover:bg-primary/12 transition-colors shrink-0"
             title={isPlaying ? t('audio.pause') : t('audio.play')}
           >
             {isPlaying ? (
@@ -234,17 +257,18 @@ export default function AudioPlayer({ preset }: AudioPlayerProps) {
 
           <button
             onClick={handleToggleEq}
-            className={`px-3 py-1.5 rounded text-xs font-medium transition-colors shrink-0 ${
+            aria-pressed={eqEnabled}
+            className={`px-3 py-1.5 rounded-control text-xs font-medium transition-colors shrink-0 ${
               eqEnabled
-                ? 'bg-blue-500 text-white hover:bg-blue-600'
-                : 'bg-gray-200 text-gray-500 hover:bg-gray-300'
+                ? 'bg-primary text-white hover:bg-primary-600'
+                : 'bg-line text-ink-600 hover:bg-cream'
             }`}
           >
             EQ {eqEnabled ? t('audio.eqOn') : t('audio.eqOff')}
           </button>
 
           <div className="flex items-center gap-2 flex-1 min-w-0">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-400 shrink-0">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-ink-600/70 shrink-0">
               <path d="M1 5h2.5L7 2v10L3.5 9H1V5z" fill="currentColor" stroke="none" />
               {volume > 0.3 && <path d="M9.5 4.5c.7.7 1.1 1.6 1.1 2.5s-.4 1.8-1.1 2.5" />}
               {volume > 0.6 && <path d="M11.5 2.5c1.2 1.2 1.9 2.8 1.9 4.5s-.7 3.3-1.9 4.5" />}
@@ -256,22 +280,26 @@ export default function AudioPlayer({ preset }: AudioPlayerProps) {
               step="0.01"
               value={volume}
               onChange={(e) => setVolume(parseFloat(e.target.value))}
-              className="flex-1 h-1 accent-blue-500 cursor-pointer"
+              className="flex-1 h-1 cursor-pointer"
+              style={{ accentColor: 'var(--color-primary)' }}
             />
-            <span className="text-xs text-gray-400 w-8 text-right tabular-nums">
+            <span className="text-xs text-ink-600 w-8 text-right tabular-nums">
               {Math.round(volume * 100)}
             </span>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-xs text-gray-400">
+        <div className="flex items-center gap-2 text-xs text-ink-600/70">
           {isPlaying && (
             <>
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
               <span>{t('audio.playing', { tone: toneLabels[toneType], state: eqEnabled ? t('audio.eqOn') : t('audio.eqOff') })}</span>
             </>
           )}
-          {!isPlaying && (
+          {!isPlaying && !eqEnabled && (
+            <span>{t('audio.eqPending')}</span>
+          )}
+          {!isPlaying && eqEnabled && (
             <span>{t('audio.idle')}</span>
           )}
         </div>

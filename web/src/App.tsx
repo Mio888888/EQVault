@@ -50,19 +50,19 @@ export default function App() {
 
   // List view
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-cream">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <header className="bg-cream/95 backdrop-blur border-b border-line sticky top-0 z-10 animate-rise-in">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-3">
-            <h1 className="text-xl font-bold text-gray-900">{t('app.title')}</h1>
+            <h1 className="text-xl font-semibold tracking-tight text-ink">{t('app.title')}</h1>
             <div className="flex items-center gap-2">
               <LanguageToggle />
               {!metaLoading && meta && (
-                <div className="text-xs text-gray-500 text-right">
-                  <span>{meta.total_profiles} {t('app.profiles')}</span>
-                  <span className="mx-1.5">|</span>
-                  <span>{meta.recommended_count} {t('app.recommended')}</span>
+                <div className="text-xs text-ink-600 text-right leading-relaxed">
+                  <span className="font-mono tabular-nums">{meta.total_profiles}</span> {t('app.profiles')}
+                  <span className="mx-1.5 text-line">|</span>
+                  <span className="font-mono tabular-nums">{meta.recommended_count}</span> {t('app.recommended')}
                   <br />
                   <span>{t('app.lastSync')} {new Date(meta.sync_time).toLocaleDateString()}</span>
                 </div>
@@ -72,29 +72,29 @@ export default function App() {
 
           {/* Toggle */}
           <div className="flex items-center gap-4 mb-3">
-            <div className="flex bg-gray-100 rounded-lg p-0.5">
+            <div className="flex bg-surface rounded-full p-0.5 border border-line">
               <button
                 onClick={!showAll ? undefined : handleToggle}
-                className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
+                className={`px-4 py-1.5 text-sm font-medium rounded-full transition-colors ${
                   !showAll
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-500 hover:text-gray-700'
+                    ? 'bg-cream text-ink shadow-sm'
+                    : 'text-ink-600 hover:text-ink'
                 }`}
               >
                 {t('app.recommendedToggle')}
               </button>
               <button
                 onClick={showAll ? undefined : handleToggle}
-                className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
+                className={`px-4 py-1.5 text-sm font-medium rounded-full transition-colors ${
                   showAll
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-500 hover:text-gray-700'
+                    ? 'bg-cream text-ink shadow-sm'
+                    : 'text-ink-600 hover:text-ink'
                 }`}
               >
                 {t('app.allProfiles')}
               </button>
             </div>
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-ink-600 font-mono tabular-nums">
               {t('app.results', { count: filtered.length })}
             </span>
           </div>
@@ -114,7 +114,7 @@ export default function App() {
         )}
 
         {indexError && (
-          <div className="bg-red-50 text-red-700 text-sm rounded-lg p-4">
+          <div className="bg-red-50 text-red-700 text-sm rounded-card p-4">
             {t('app.loadError', { error: indexError })}
           </div>
         )}

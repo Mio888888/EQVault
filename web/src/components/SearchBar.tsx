@@ -30,10 +30,10 @@ export default function SearchBar({ value, onChange }: SearchBarProps) {
         value={local}
         onChange={(e) => setLocal(e.target.value)}
         placeholder={t('search.placeholder')}
-        className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 pl-10 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+        className="w-full rounded-control border border-line bg-cream px-4 py-2.5 pl-10 text-sm text-ink placeholder-ink-600/60 transition-colors focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
       />
       <svg
-        className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none"
+        className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ink-600 pointer-events-none"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -43,7 +43,7 @@ export default function SearchBar({ value, onChange }: SearchBarProps) {
       {local && (
         <button
           onClick={handleClear}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-sm"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-600 hover:text-ink text-sm transition-colors"
           aria-label={t('search.clear')}
         >
           &#x2715;

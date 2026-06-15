@@ -61,7 +61,7 @@ export default function EqEditor({ preset, workingPreset, onPresetChange, onRese
     <div className="space-y-3">
       {/* Preamp editor */}
       <div className="flex items-center gap-3">
-        <label className="text-sm font-medium text-gray-700 shrink-0">{t('eq.preamp')}</label>
+        <label className="text-sm font-medium text-ink-600 shrink-0">{t('eq.preamp')}</label>
         <input
           type="number"
           value={workingPreset.preamp}
@@ -69,21 +69,21 @@ export default function EqEditor({ preset, workingPreset, onPresetChange, onRese
           step={0.1}
           min={-20}
           max={20}
-          className="w-20 text-right font-mono text-sm border border-gray-200 rounded px-2 py-1 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400"
+          className="w-20 text-right font-mono text-sm border border-line bg-cream rounded-control px-2 py-1 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
         />
-        <span className="text-xs text-gray-400">dB</span>
+        <span className="text-xs text-ink-600/70">dB</span>
       </div>
 
       {/* Filter editors table */}
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-gray-200">
-              <th className="text-left py-1.5 px-2 text-gray-500 font-medium w-10">{t('eq.colIndex')}</th>
-              <th className="text-left py-1.5 px-2 text-gray-500 font-medium w-12">{t('eq.colType')}</th>
-              <th className="text-right py-1.5 px-2 text-gray-500 font-medium">{t('eq.colFreq')}</th>
-              <th className="text-right py-1.5 px-2 text-gray-500 font-medium">{t('eq.colGain')}</th>
-              <th className="text-right py-1.5 px-2 text-gray-500 font-medium">{t('eq.colQ')}</th>
+            <tr className="border-b border-line">
+              <th className="text-left py-1.5 px-2 text-ink-600 font-medium w-10">{t('eq.colIndex')}</th>
+              <th className="text-left py-1.5 px-2 text-ink-600 font-medium w-12">{t('eq.colType')}</th>
+              <th className="text-right py-1.5 px-2 text-ink-600 font-medium">{t('eq.colFreq')}</th>
+              <th className="text-right py-1.5 px-2 text-ink-600 font-medium">{t('eq.colGain')}</th>
+              <th className="text-right py-1.5 px-2 text-ink-600 font-medium">{t('eq.colQ')}</th>
             </tr>
           </thead>
           <tbody>
@@ -100,28 +100,28 @@ export default function EqEditor({ preset, workingPreset, onPresetChange, onRese
       </div>
 
       {/* Action buttons */}
-      <div className="flex items-center gap-2 pt-2 border-t border-gray-200">
+      <div className="flex items-center gap-2 pt-2 border-t border-line">
         <button
           onClick={onReset}
           disabled={!isModified}
-          className="px-3 py-1.5 rounded text-xs font-medium border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          className="px-3 py-1.5 rounded-control text-xs font-medium border border-line text-ink-600 hover:bg-cream hover:text-ink transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {t('eq.reset')}
         </button>
         <button
           onClick={handleExport}
-          className="px-3 py-1.5 rounded text-xs font-medium bg-blue-500 text-white hover:bg-blue-600 transition-colors"
+          className="px-3 py-1.5 rounded-control text-xs font-medium bg-primary text-white hover:bg-primary-600 transition-colors"
         >
           {t('eq.exportModified')}
         </button>
         <button
           onClick={handleCopy}
-          className="px-3 py-1.5 rounded text-xs font-medium border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors"
+          className="px-3 py-1.5 rounded-control text-xs font-medium border border-line text-ink-600 hover:bg-cream hover:text-ink transition-colors"
         >
           {copied ? t('eq.copied') : t('eq.copyModified')}
         </button>
         {isModified && (
-          <span className="text-xs text-amber-600 ml-auto">
+          <span className="text-xs text-primary ml-auto">
             {t('eq.modified')}
           </span>
         )}

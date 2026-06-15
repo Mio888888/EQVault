@@ -11,7 +11,7 @@ export default function LanguageToggle() {
   return (
     <button
       onClick={toggle}
-      className="text-xs px-2 py-1 rounded border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors font-medium"
+      className="text-xs px-2 py-1 rounded-full border border-line text-ink-600 hover:bg-surface hover:text-ink transition-colors font-medium"
     >
       {i18n.language === 'zh' ? 'EN' : '中'}
     </button>

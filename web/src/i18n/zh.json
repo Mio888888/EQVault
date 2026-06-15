@@ -91,6 +91,7 @@
     "pause": "暂停",
     "eqOn": "EQ 开",
     "eqOff": "EQ 关",
+    "eqPending": "EQ 已关闭，将在播放时生效",
     "playing": "正在播放 {{tone}}，EQ {{state}}",
     "idle": "选择测试信号并点击播放以试听",
     "playError": "音频播放失败"

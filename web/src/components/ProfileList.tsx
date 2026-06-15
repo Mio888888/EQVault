@@ -59,14 +59,14 @@ export default function ProfileList({ profiles, onSelect }: ProfileListProps) {
 
   if (profiles.length === 0) {
     return (
-      <div className="flex items-center justify-center py-12 text-gray-400 text-sm">
+      <div className="flex items-center justify-center py-12 text-ink-600/70 text-sm">
         {t('list.empty')}
       </div>
     );
   }
 
   return (
-    <div className="border border-gray-200 rounded-lg overflow-hidden bg-white">
+    <div className="border border-line rounded-card overflow-hidden bg-surface shadow-card">
       <List
         rowComponent={RowComponent}
         rowCount={profiles.length}

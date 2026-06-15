@@ -51,16 +51,16 @@ export default function EqTab({ profile, onCopy, copiedKey }: EqTabProps) {
         <AudioPlayer preset={audioPreset} />
       )}
 
-      <div className="bg-white rounded-lg border border-gray-200 p-4">
+      <div className="bg-surface rounded-card border border-line shadow-card p-4">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-gray-700">{t('eq.parametric')}</h2>
+          <h2 className="text-sm font-semibold text-ink">{t('eq.parametric')}</h2>
           <div className="flex items-center gap-2">
             <button
               onClick={handleToggleEdit}
-              className={`text-xs px-2.5 py-1 rounded border transition-colors ${
+              className={`text-xs px-2.5 py-1 rounded-control border transition-colors ${
                 editingParametric
-                  ? 'border-blue-400 bg-blue-50 text-blue-600'
-                  : 'border-gray-300 text-gray-600 hover:bg-gray-50'
+                  ? 'border-primary bg-primary/12 text-primary'
+                  : 'border-line text-ink-600 hover:bg-cream hover:text-ink'
               }`}
             >
               {editingParametric ? t('eq.view') : t('eq.edit')}
@@ -68,7 +68,7 @@ export default function EqTab({ profile, onCopy, copiedKey }: EqTabProps) {
             {!editingParametric && (
               <button
                 onClick={() => onCopy('parametric', formatEqText(profile.eq.parametric.preamp, profile.eq.parametric.filters))}
-                className="text-xs px-2.5 py-1 rounded border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors"
+                className="text-xs px-2.5 py-1 rounded-control border border-line text-ink-600 hover:bg-cream hover:text-ink transition-colors"
               >
                 {copiedKey === 'parametric' ? t('eq.copied') : t('eq.copy')}
               </button>
@@ -91,12 +91,12 @@ export default function EqTab({ profile, onCopy, copiedKey }: EqTabProps) {
       </div>
 
       {!editingParametric && (
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
+        <div className="bg-surface rounded-card border border-line shadow-card p-4">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-semibold text-gray-700">{t('eq.fixedBand')}</h2>
+            <h2 className="text-sm font-semibold text-ink">{t('eq.fixedBand')}</h2>
             <button
               onClick={() => onCopy('fixed_band', formatEqText(profile.eq.fixed_band.preamp, profile.eq.fixed_band.filters))}
-              className="text-xs px-2.5 py-1 rounded border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors"
+              className="text-xs px-2.5 py-1 rounded-control border border-line text-ink-600 hover:bg-cream hover:text-ink transition-colors"
             >
               {copiedKey === 'fixed_band' ? t('eq.copied') : t('eq.copy')}
             </button>
@@ -106,17 +106,17 @@ export default function EqTab({ profile, onCopy, copiedKey }: EqTabProps) {
       )}
 
       {!editingParametric && (
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
+        <div className="bg-surface rounded-card border border-line shadow-card p-4">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-semibold text-gray-700">{t('eq.graphic')}</h2>
+            <h2 className="text-sm font-semibold text-ink">{t('eq.graphic')}</h2>
             <button
               onClick={() => onCopy('graphic', `GraphicEQ: ${profile.eq.graphic}`)}
-              className="text-xs px-2.5 py-1 rounded border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors"
+              className="text-xs px-2.5 py-1 rounded-control border border-line text-ink-600 hover:bg-cream hover:text-ink transition-colors"
             >
               {copiedKey === 'graphic' ? t('eq.copied') : t('eq.copy')}
             </button>
           </div>
-          <pre className="text-xs font-mono text-gray-700 bg-gray-50 rounded p-3 overflow-x-auto whitespace-pre-wrap break-all">
+          <pre className="text-xs font-mono text-ink-600 bg-cream rounded-control p-3 overflow-x-auto whitespace-pre-wrap break-all">
             {`GraphicEQ: ${profile.eq.graphic}`}
           </pre>
         </div>

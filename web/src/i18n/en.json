@@ -91,6 +91,7 @@
     "pause": "Pause",
     "eqOn": "EQ ON",
     "eqOff": "EQ OFF",
+    "eqPending": "EQ bypassed — takes effect on next play",
     "playing": "Playing {{tone}} with EQ {{state}}",
     "idle": "Select a test tone and press play to listen",
     "playError": "Failed to play audio"
