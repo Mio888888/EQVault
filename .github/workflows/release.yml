@@ -1,21 +1,19 @@
-name: Sync AutoEq and deploy Pages
+name: Build AutoEq resource pack and publish release
 
 on:
   schedule:
-    - cron: "17 2 * * *" # daily UTC ~2:17am
+    - cron: "17 2 1 * *" # monthly on 1st, UTC ~2:17am
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
-  group: github-pages-autoeq
+  group: autoeq-release
   cancel-in-progress: false
 
 jobs:
-  build:
+  build-and-release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -75,28 +73,31 @@ jobs:
           # Copy frontend build output into dist (data dir already populated by transformer)
           cp -R web/dist/* dist/
 
-      - name: Guard Pages artifact size
+      - name: Guard resource pack size
         run: |
           SIZE=$(du -sm dist | cut -f1)
-          echo "Artifact size: ${SIZE} MiB"
-          if [ "$SIZE" -ge 900 ]; then
-            echo "ERROR: Artifact size ${SIZE} MiB exceeds 900 MiB limit"
+          echo "Resource pack size: ${SIZE} MiB"
+          if [ "$SIZE" -ge 2000 ]; then
+            echo "ERROR: Resource pack size ${SIZE} MiB exceeds 2000 MiB limit"
             exit 1
           fi
-          echo "Size check passed (${SIZE} MiB < 900 MiB)"
+          echo "Size check passed (${SIZE} MiB < 2000 MiB)"
 
-      - uses: actions/configure-pages@v5
+      - name: Package resource pack
+        run: |
+          TAG="autoeq-$(date -u +%Y-%m)"
+          echo "TAG=$TAG" >> "$GITHUB_ENV"
+          zip -r "${TAG}.zip" dist
 
-      - uses: actions/upload-pages-artifact@v4
-        with:
-          path: dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG already exists, updating asset."
+            gh release upload "$TAG" "${TAG}.zip" --clobber
+          else
+            gh release create "$TAG" "${TAG}.zip" \
+              --title "AutoEq 资源包 $TAG" \
+              --notes "每月自动构建的 AutoEq 资源包，包含静态数据与前端产物。"
+          fi
